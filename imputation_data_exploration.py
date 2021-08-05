@@ -26,7 +26,7 @@ moments={}
 for i in train.columns[3:-1]:##exclude patient ID, patient image, hospital, prognosis
     moments[i]=[train[i].describe()[1], train[i].describe()[2]]
 
-def imput_accur(series, series_imp):
+def imput_accur_moments(series, series_imp):
     imp_mean=series_imp.describe()[1]
     imp_stddev=series_imp.describe()[2]
     meanval=series.describe()[1]
@@ -46,11 +46,14 @@ for k in range(1, 50):
         series=train_red[col]
         series_imputed=train_imputed[col]
         
-        accur.loc[k, col]=imput_accur(series, series_imputed)
+        accur.loc[k, col]=imput_accur_moments(series, series_imputed)
         
 #next: try iterateive imputer
 #afterwards: check other metrices, such as removing some values, use the imputer, see if they get back
-        
+
+def imput_accur_remove(series, series_imp, index):
+    
+
 
         
 
