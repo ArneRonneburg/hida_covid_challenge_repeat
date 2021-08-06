@@ -51,7 +51,41 @@ for k in range(1, 50):
 #next: try iterateive imputer
 #afterwards: check other metrices, such as removing some values, use the imputer, see if they get back
 
-def imput_accur_remove(series, series_imp, index):
+def imput_accur_remove(original, imputed, replaced):
+    #all three are pd.Dataframes, in replaced a True always when the value was replaced
+    accuracy={}
+    for col in replaced.columns:
+        rep=np.array(replaced[col][replaced[col]==True].index)
+        org=original.loc[rep,col]
+        imp=imputed.loc[rep,col]
+        if org.dtype!=bool:
+            accur=np.mean(abs(np.array(org)-np.array(rep))/np.array(org))
+        else:
+            accur=np.mean(abs(np.array(org)-np.array(rep)))
+        accuracy[col]=accur
+    return accuracy
+
+###replace the columns in the train set by boolean values for such as sex, DifficultyInBreathing etc.
+binarycolumns=['Sex','Cough','DifficultyInBreathing','RespiratoryFailure', 'CardiovascularDisease'], 
+train_bin=pd.DataFrame([])
+for col in train_red.columns:
+    if col not in binarycolumns:
+        train_bin[col]=train_red[col]
+    else: 
+        coef=[train_bin[col].unique()]
+        for c in coef:
+            if np.isnan(c)==True:
+                coef.remove(c)
+        ###now we have the two binary values in the column, which can be referred to True and False
+        ###train.Cough[train.Cough==0]=2
+
+
+        
+        
+    
+    #remove 10% of the remaining values per columns, and compare afterwards
+    
+    
     
 
 
