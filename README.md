@@ -9,14 +9,7 @@ Geeigneten Imputer finden
 (Gelb = Fehlt )
 ![Matrixübersicht_OhneBild](https://user-images.githubusercontent.com/57065083/128595496-d45512fa-8a1e-4951-8b9d-32d6b3270e90.png)
 
-unterschedliche verteilung 
 
-Fibogen
-DDimer
-SaO2
-Fehlen deutlich mehr Daten als bei dem Rest 
-
-(underfitting potential)
 
 | Column   |  Fehlende Daten| Prozent |  Markant |
 | ---------| ---------------|---------|----------|
@@ -41,6 +34,16 @@ Fehlen deutlich mehr Daten als bei dem Rest
 |RespiratoryFailure|159|18.42| |
 |Prognosis|0|0.00| |
 
+Unterschiedliche verteilung 
+
+Fibogen
+DDimer
+SaO2
+Fehlen deutlich mehr Daten als bei dem Rest 
+
+(underfitting potential)
+
+Krankenhausdaten prüfen
 
 |Hospital| Anzahl|
 |--------|-------|
