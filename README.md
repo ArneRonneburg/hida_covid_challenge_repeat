@@ -21,11 +21,8 @@ Fehlen deutlich mehr Daten als bei dem Rest
 | Column   |  Fehlende Daten| Prozent |  Markant |
 | ---------| ---------------|---------|----------|
 |PatientID |  0 |  0.00 | |
-
 |ImageFile |  0|  0.00| |
-
 |Hospital|  0|  0.00|  |
-
 |Age|1 | 0.12| |
 
 Sex,                    Fehlende Daten: 0,  0.00
