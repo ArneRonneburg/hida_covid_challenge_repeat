@@ -42,4 +42,12 @@ Fehlen deutlich mehr Daten als bei dem Rest
 |Prognosis|0|0.00| |
 
 
-Eventuell eine Spalte einführen, die die Prognosis hervorhebt...
+|Hospital| Anzahl|
+|--------|-------|
+|0      |104 |
+|1     |31 |
+|2    |139 | 
+|3    |101 |
+|4    |488 |
+
+Übersicht über den Ursprung der Daten![Matrixübersicht_OhneBild_sort_Hosp](https://user-images.githubusercontent.com/57065083/128598568-4c275ed1-f2aa-449d-ab19-7cb5bff85e24.png)
