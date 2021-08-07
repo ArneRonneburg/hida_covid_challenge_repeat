@@ -18,45 +18,47 @@ Fehlen deutlich mehr Daten als bei dem Rest
 
 (underfitting potential)
 
-PatientID,  Fehlende Daten: 0, Prozent 0.00
+| Column   |  Fehlende Daten| Prozent |  Markant |
+| ---------| ---------------|---------|----------|
+|PatientID |  0 |  0.00 | |
 
-ImageFile,  Fehlende Daten: 0, Prozent 0.00
+|ImageFile |  0|  0.00| |
 
-Hospital,  Fehlende Daten: 0, Prozent 0.00
+|Hospital|  0|  0.00|  |
 
-Age,Fehlende Daten: 1, Prozent 0.12
+|Age|1 | 0.12| |
 
-Sex,                    Fehlende Daten: 0, Prozent 0.00
+Sex,                    Fehlende Daten: 0,  0.00
 
-Temp_C,                 Fehlende Daten: 154, Prozent 17.84
+Temp_C,                 Fehlende Daten: 154,  17.84
 
-Cough,                  Fehlende Daten: 0, Prozent 0.00
+Cough,                  Fehlende Daten: 0,  0.00
 
-DifficultyInBreathing,  Fehlende Daten: 4, Prozent 0.46
+DifficultyInBreathing,  Fehlende Daten: 4,  0.46
 
-WBC,  Fehlende Daten: 9, Prozent 1.04
+WBC,  Fehlende Daten: 9,  1.04
 
-CRP,  Fehlende Daten: 33, Prozent 3.82
+CRP,  Fehlende Daten: 33,  3.82
 
->Fibrinogen,  Fehlende Daten: 591, Prozent 68.48      <----------
+>Fibrinogen,  Fehlende Daten: 591,  68.48      <----------
+>
+LDH,  Fehlende Daten: 136,  15.76
 
-LDH,  Fehlende Daten: 136, Prozent 15.76
+>Ddimer,  Fehlende Daten: 621,  71.96      <----------
 
->Ddimer,  Fehlende Daten: 621, Prozent 71.96      <----------
+Ox_percentage,  Fehlende Daten: 243,  28.16
 
-Ox_percentage,  Fehlende Daten: 243, Prozent 28.16
+PaO2,  Fehlende Daten: 170,  19.70
 
-PaO2,  Fehlende Daten: 170, Prozent 19.70
+>SaO2,  Fehlende Daten: 583,  67.56        <---------
 
->SaO2,  Fehlende Daten: 583, Prozent 67.56        <---------
+pH,  Fehlende Daten: 207,  23.99       
 
-pH,  Fehlende Daten: 207, Prozent 23.99       
+CardiovascularDisease |19|  2.20 ||
 
-CardiovascularDisease,  Fehlende Daten: 19, Prozent 2.20
+|RespiratoryFailure|  | 159 | 18.42 ||
 
-RespiratoryFailure,  Fehlende Daten: 159, Prozent 18.42
-
-Prognosis,  Fehlende Daten: 0, Prozent 0.00
+|Prognosis| 0| 0.00 ||
 
 
 Eventuell eine Spalte einführen, die die Prognosis hervorhebt...
