@@ -1,14 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy as np
 from sklearn.preprocessing import LabelEncoder,OneHotEncoder
-from sklearn.model_selection import train_test_split,cross_val_score,RepeatedStratifiedKFold
-from sklearn.impute import SimpleImputer
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import Pipeline
-#from sklearn.svm import SVR
-from sklearn.metrics import classification_report, confusion_matrix
+
 
 ####pandas option#####
 pd.set_option('display.max_columns', None)
