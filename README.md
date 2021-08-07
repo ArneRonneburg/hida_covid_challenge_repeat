@@ -57,3 +57,6 @@ CardiovascularDisease,  Fehlende Daten: 19, Prozent 2.20
 RespiratoryFailure,  Fehlende Daten: 159, Prozent 18.42
 
 Prognosis,  Fehlende Daten: 0, Prozent 0.00
+
+
+Eventuell eine Spalte einführen, die die Prognosis hervorhebt...
