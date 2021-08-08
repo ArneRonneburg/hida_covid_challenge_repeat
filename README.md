@@ -60,8 +60,11 @@ Heatmap sortiert nach Krankenhäusern
 | Vollständige Datensäzte | 6 |
 |------------|-----|
 
+# Ausreißer ?
 
-#Daten Korrelation
+![Ausreißer](https://user-images.githubusercontent.com/57065083/128627025-4d0df93d-76e5-4e08-81db-7ed5a42dc5ae.png)
+
+# Daten Korrelation
 
 ![Correlation](https://user-images.githubusercontent.com/57065083/128599579-4ec158d6-8f3b-4fe1-9033-a6335474597a.png)
 
