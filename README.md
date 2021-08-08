@@ -4,11 +4,13 @@
 Geeigneten Imputer finden
 
 
+Paper:
+ https://statisticalhorizons.com/wp-content/uploads/MissingDataByML.pdf
+
 # Übersicht über die Daten 
 
 (Gelb = Fehlt )
 ![Matrixübersicht_OhneBild](https://user-images.githubusercontent.com/57065083/128595496-d45512fa-8a1e-4951-8b9d-32d6b3270e90.png)
-
 
 
 | Column   |  Fehlende Daten| Prozent |  Markant |
@@ -34,14 +36,16 @@ Geeigneten Imputer finden
 |RespiratoryFailure|159|18.42| |
 |Prognosis|0|0.00| |
 
+![Overview different](https://user-images.githubusercontent.com/57065083/128631716-1c5c8bbc-c76a-412e-a65e-8c44b2773eea.png)
+
 Unterschiedliche verteilung 
 
 Fibogen
 DDimer
 SaO2
-Fehlen deutlich mehr Daten als bei dem Rest 
 
-(underfitting potential)
+Fehlen deutlich mehr Daten als bei dem Rest 
+(underfitting potential)!!!!
 
 Krankenhausdaten prüfen
 
@@ -55,13 +59,28 @@ Krankenhausdaten prüfen
 
 Heatmap sortiert nach Krankenhäusern
 
-[Matrixübersicht_OhneBild_sort_Hosp](https://user-images.githubusercontent.com/57065083/128598568-4c275ed1-f2aa-449d-ab19-7cb5bff85e24.png)
+![Matrixübersicht_OhneBild_sort_Hosp](https://user-images.githubusercontent.com/57065083/128598568-4c275ed1-f2aa-449d-ab19-7cb5bff85e24.png)
 
 | Vollständige Datensäzte | 6 |
 |------------|-----|
 
+# Ausreißer ?
 
-#Daten Korrelation
+![Ausreißer](https://user-images.githubusercontent.com/57065083/128627025-4d0df93d-76e5-4e08-81db-7ed5a42dc5ae.png)
+
+# Daten Korrelation
 
 ![Correlation](https://user-images.githubusercontent.com/57065083/128599579-4ec158d6-8f3b-4fe1-9033-a6335474597a.png)
+
+# Idee
+1. Daten splitten in viele fehlende Daten und wenig fehlende Daten
+2. imputer auf wenig fehlende Daten anwenden
+3. imputer mit den eingesetzten Daten auf die vielen fehlenden Daten einsetzen
+4. lossfunktionen abgleichen
+
+Ich vermute, das unterschiedliche Imputer bei unterschiedlichen Anzahl fehlender Daten besser Funktionieren. 
+ Sprich Imputer a ist eher für wenig fehlende Daten
+        imputer b ist eher für viele fehlende Daten
+        
+Aber rein logisch, würde ich sagen, dass je mehr Daten ein Imputer zur Verfügung hat, desto besser und genauer werden die Predictions
 
