@@ -51,11 +51,12 @@ for k in range(1, 50):
 #next: try iterateive imputer
 #afterwards: check other metrices, such as removing some values, use the imputer, see if they get back
 
-def imput_accur_remove(original, imputed, replaced):
-    #all three are pd.Dataframes, in replaced a True always when the value was replaced
+def imput_accur_remove(original, imputed, indices):
+    #all three are pd.Dataframes, 
+    #in indices a True always when the value was replaced
     accuracy={}
-    for col in replaced.columns:
-        rep=np.array(replaced[col][replaced[col]==True].index)
+    for col in indices.columns:
+        rep=np.array(indices[col][indices[col]==True].index)
         org=original.loc[rep,col]
         imp=imputed.loc[rep,col]
         if org.dtype!=bool:
@@ -66,24 +67,51 @@ def imput_accur_remove(original, imputed, replaced):
     return accuracy
 
 ###replace the columns in the train set by boolean values for such as sex, DifficultyInBreathing etc.
-binarycolumns=['Sex','Cough','DifficultyInBreathing','RespiratoryFailure', 'CardiovascularDisease'], 
-train_bin=pd.DataFrame([])
-for col in train_red.columns:
-    if col not in binarycolumns:
-        train_bin[col]=train_red[col]
-    else: 
-        coef=[train_bin[col].unique()]
-        for c in coef:
-            if np.isnan(c)==True:
-                coef.remove(c)
-        ###now we have the two binary values in the column, which can be referred to True and False
-        ###train.Cough[train.Cough==0]=2
+binarycolumns=['Sex','Cough','DifficultyInBreathing','RespiratoryFailure', 'CardiovascularDisease'] 
+train_bin=train_red.copy()
+
+#labelencoder
+from sklearn import preprocessing
+import random
+
+encoder = preprocessing.LabelEncoder()
+
+for col in binarycolumns:
+    train_bin[col]=encoder.fit_transform(train_bin[col])
+    train_bin[col]=train_bin[col].astype(bool)
+
+
+def remove_random_values(df):
+    df_removed=df.copy()
+    ###the df where the data is removed
+    df_index=df.copy()
+    
+    
+    for col in df.columns:
+        indices=list(df[col].dropna().index)
+        set_nan=random.sample(indices, int(len(indices)/10))#remove roughly 10%
+        df_removed.loc[np.array(set_nan), col] = np.nan
+        df_index.loc[:,col]=False
+        df_index.loc[np.array(set_nan), col]=True
+    return df_removed, df_index
+imputer=KNN(n_neighbors=10)
+acc=[]
+for i in range(0, 10):
+    df1,df2=remove_random_values(train_bin)
+    imputed=pd.DataFrame(imputer.fit_transform(df1), columns=df1.columns)
+    acc.append(imput_accur_remove(train_bin, imputed, df2))
+
+#somehow the accuracy is not correct...
+    
+            
+
+    
 
 
         
         
     
-    #remove 10% of the remaining values per columns, and compare afterwards
+    
     
     
     
