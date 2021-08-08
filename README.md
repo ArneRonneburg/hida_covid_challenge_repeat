@@ -61,7 +61,7 @@ Krankenhausdaten prüfen
 
 Heatmap sortiert nach Krankenhäusern
 
-[Matrixübersicht_OhneBild_sort_Hosp](https://user-images.githubusercontent.com/57065083/128598568-4c275ed1-f2aa-449d-ab19-7cb5bff85e24.png)
+![Matrixübersicht_OhneBild_sort_Hosp](https://user-images.githubusercontent.com/57065083/128598568-4c275ed1-f2aa-449d-ab19-7cb5bff85e24.png)
 
 | Vollständige Datensäzte | 6 |
 |------------|-----|
