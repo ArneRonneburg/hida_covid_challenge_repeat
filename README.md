@@ -10,6 +10,9 @@ Geeigneten Imputer finden
 ![Matrixübersicht_OhneBild](https://user-images.githubusercontent.com/57065083/128595496-d45512fa-8a1e-4951-8b9d-32d6b3270e90.png)
 
 
+![Overview different](https://user-images.githubusercontent.com/57065083/128631716-1c5c8bbc-c76a-412e-a65e-8c44b2773eea.png)
+
+
 
 | Column   |  Fehlende Daten| Prozent |  Markant |
 | ---------| ---------------|---------|----------|
