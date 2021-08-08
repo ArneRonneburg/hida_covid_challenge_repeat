@@ -4,6 +4,9 @@
 Geeigneten Imputer finden
 
 
+Paper:
+ https://statisticalhorizons.com/wp-content/uploads/MissingDataByML.pdf
+
 # Übersicht über die Daten 
 
 (Gelb = Fehlt )
