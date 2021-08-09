@@ -20,7 +20,10 @@ path=r"C:\Users\Arne\Documents\DataScience\hida_covid_challenge_repeat/"
 train=pd.read_csv(path + "trainSet.txt", index_col=None)
 test=pd.read_csv(path + "testSet.txt", index_col=None)
 ####define measures for the imputation quality. Idea 1: they have a similar mean and variance 
+from sklearn import preprocessing
+import random
 
+encoder = preprocessing.LabelEncoder()
 #for a given column, calculate the mean and the variance
 moments={}
 for i in train.columns[3:-1]:##exclude patient ID, patient image, hospital, prognosis
@@ -37,6 +40,8 @@ def imput_accur_moments(series, series_imp):
 #check the different knn imputer properties, which one preserves the moments?
 accur=pd.DataFrame(np.zeros((50, len(train.columns[3:-1]))), columns=train.columns[3:-1])
 train_red=train[train.columns[3:-1]]
+y=encoder.fit_transform(train.Prognosis)
+
 for k in range(1, 50):
     imputer=KNN(n_neighbors=k)
     train_imputed=imputer.fit_transform(train_red)
@@ -51,30 +56,13 @@ for k in range(1, 50):
 #next: try iterateive imputer
 #afterwards: check other metrices, such as removing some values, use the imputer, see if they get back
 
-def imput_accur_remove(original, imputed, indices):
-    #all three are pd.Dataframes, 
-    #in indices a True always when the value was replaced
-    accuracy={}
-    for col in indices.columns:
-        rep=np.array(indices[col][indices[col]==True].index)
-        org=original.loc[rep,col]
-        imp=imputed.loc[rep,col]
-        if org.dtype!=bool:
-            accur=np.mean(abs(np.array(org)-np.array(rep))/np.array(org))
-        else:
-            accur=np.mean(abs(np.array(org)-np.array(rep)))
-        accuracy[col]=accur
-    return accuracy
 
 ###replace the columns in the train set by boolean values for such as sex, DifficultyInBreathing etc.
 binarycolumns=['Sex','Cough','DifficultyInBreathing','RespiratoryFailure', 'CardiovascularDisease'] 
 train_bin=train_red.copy()
 
 #labelencoder
-from sklearn import preprocessing
-import random
 
-encoder = preprocessing.LabelEncoder()
 
 for col in binarycolumns:
     train_bin[col]=encoder.fit_transform(train_bin[col])
@@ -94,12 +82,88 @@ def remove_random_values(df):
         df_index.loc[:,col]=False
         df_index.loc[np.array(set_nan), col]=True
     return df_removed, df_index
-imputer=KNN(n_neighbors=10)
-acc=[]
-for i in range(0, 10):
+
+def imput_accuracy(original, imputed, indices):
+    #all three are pd.Dataframes, 
+    #in indices a True always when the value was replaced
+    #maybe use other metrices for the differencce, e.g. the standard deviation?
+    accuracy=pd.DataFrame([], columns=original.columns)
+    for col in indices.columns:
+        rep=np.array(indices[col][indices[col]==True].index)
+        org=original.loc[rep,col]
+        imp=imputed.loc[rep,col]
+        if org.dtype!=bool:
+            accur=np.mean(abs(np.array(org)-np.array(imp))/org.std())
+        else:
+            accur=np.mean(abs(np.array(org)-np.array(imp)))
+            
+        accuracy[col]=[accur]
+    return accuracy
+def do_the_imputation(data, imputer):
+    #introduce a rounding for binary columns
+    #introduce a range for columns such as oxygen saturation or ph
+    
+    return data
+imputer_accuracy=np.zeros(75)
+for j in range(1, len(imputer_accuracy)):
+    print(j)
+    imputer=KNN(n_neighbors=j)
+    
     df1,df2=remove_random_values(train_bin)
     imputed=pd.DataFrame(imputer.fit_transform(df1), columns=df1.columns)
-    acc.append(imput_accur_remove(train_bin, imputed, df2))
+    acc= imput_accuracy(train_bin, imputed, df2)
+    for i in range(1, 10):
+        df1,df2=remove_random_values(train_bin)
+        imputed=pd.DataFrame(imputer.fit_transform(df1), columns=df1.columns)
+        acc=acc + imput_accuracy(train_bin, imputed, df2)
+    imputer_accuracy[j]=acc.mean(axis=1)
+
+imputer=KNN(n_neighbors=15)
+    
+
+imputed=pd.DataFrame(imputer.fit_transform(train_bin), columns=train_bin.columns)
+from sklearn.model_selection import train_test_split as tts    
+from sklearn.ensemble import ExtraTreesRegressor as ETR
+from sklearn.ensemble import RandomForestRegressor as RFR
+from sklearn.tree import DecisionTreeRegressor as DTR
+from sklearn.ensemble import AdaBoostRegressor as ABR
+from sklearn.ensemble import BaggingRegressor as BR
+from sklearn.ensemble import GradientBoostingRegressor as GBR
+from sklearn.ensemble import StackingRegressor as STR
+from sklearn.ensemble import VotingRegressor as VR
+from sklearn.experimental import enable_hist_gradient_boosting
+from sklearn.ensemble import HistGradientBoostingRegressor as HGBR
+
+Xtrain, Xtest,ytrain ,ytest=tts(imputed, y)
+RESULT={}
+regressors=['RFR','ETR', 'DTR', 'ABR','BR','GBR','VR','HGBR']
+for name in regressors:
+
+    regressor=eval(name + "()")
+    
+    regressor.fit(Xtrain, ytrain)
+    res=regressor.predict(Xtest).round()
+    pred_acc=1-np.mean(abs(res-ytest))
+    RESULT[name]=pred_acc
+#try 'STR' maybe also....stacking estimators together
+regressor=STR(estimators=[ETR, RFR, GBR])
+regressor.fit(Xtrain, ytrain)
+res=regressor.predict(Xtest).round()
+pred_acc=1-np.mean(abs(res-ytest))
+RESULT['STR']=pred_acc
+# original, imputed, indices = train_bin, imputed, df2
+
+# accuracy={}
+# for col in indices.columns:
+#     rep=np.array(indices[col][indices[col]==True].index)
+#     org=original.loc[rep,col]
+#     imp=imputed.loc[rep,col]
+#     if org.dtype!=bool:
+#         accur=np.mean(abs(np.array(org)-np.array(imp))/np.array(org))
+#     else:
+#         accur=np.mean(abs(np.array(org)-np.array(imp)))
+#     accuracy[col]=accur
+
 
 #somehow the accuracy is not correct...
     
@@ -117,7 +181,22 @@ for i in range(0, 10):
     
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
+
 
 
 
