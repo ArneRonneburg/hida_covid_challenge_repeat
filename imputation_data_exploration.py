@@ -125,6 +125,7 @@ imputed=pd.DataFrame(imputer.fit_transform(train_bin), columns=train_bin.columns
 from sklearn.model_selection import train_test_split as tts    
 from sklearn.ensemble import ExtraTreesRegressor as ETR
 from sklearn.ensemble import RandomForestRegressor as RFR
+from sklearn.ensemble import RandomForestClassifier as RFC
 from sklearn.tree import DecisionTreeRegressor as DTR
 from sklearn.ensemble import AdaBoostRegressor as ABR
 from sklearn.ensemble import BaggingRegressor as BR
@@ -133,10 +134,21 @@ from sklearn.ensemble import StackingRegressor as STR
 from sklearn.ensemble import VotingRegressor as VR
 from sklearn.experimental import enable_hist_gradient_boosting
 from sklearn.ensemble import HistGradientBoostingRegressor as HGBR
-
+from sklearn.linear_model import BayesianRidge as BR
+from sklearn.linear_model import ARDRegression as ARD
+from xgboost import XGBRegressor as XGB
+from sklearn.linear_model import ElasticNet as EN
+from sklearn.linear_model import Lars
+from sklearn.linear_model import ElasticNetCV as ENCV
+from sklearn.linear_model import LogisticRegression as LogR
+from sklearn.linear_model import RidgeClassifier as Ridge
+from sklearn.linear_model import Perceptron, LinearRegression
+from sklearn.svm import LinearSVR as LinSVR
 Xtrain, Xtest,ytrain ,ytest=tts(imputed, y)
 RESULT={}
-regressors=['RFR','ETR', 'DTR', 'ABR','BR','GBR','VR','HGBR']
+regressors=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
+            'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 'LogR', 
+            'Ridge', 'Perceptron', 'LinearRegression', 'LinSVR']
 for name in regressors:
 
     regressor=eval(name + "()")
@@ -145,12 +157,14 @@ for name in regressors:
     res=regressor.predict(Xtest).round()
     pred_acc=1-np.mean(abs(res-ytest))
     RESULT[name]=pred_acc
+    
 #try 'STR' maybe also....stacking estimators together
-regressor=STR(estimators=[ETR, RFR, GBR])
-regressor.fit(Xtrain, ytrain)
-res=regressor.predict(Xtest).round()
-pred_acc=1-np.mean(abs(res-ytest))
-RESULT['STR']=pred_acc
+#'VR'
+
+
+
+
+
 # original, imputed, indices = train_bin, imputed, df2
 
 # accuracy={}
