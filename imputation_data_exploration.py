@@ -146,10 +146,10 @@ from sklearn.linear_model import Perceptron, LinearRegression
 from sklearn.svm import LinearSVR as LinSVR
 Xtrain, Xtest,ytrain ,ytest=tts(imputed, y)
 RESULT={}
-regressors=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
+models=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
             'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 'LogR', 
             'Ridge', 'Perceptron', 'LinearRegression', 'LinSVR']
-for name in regressors:
+for name in models:
 
     regressor=eval(name + "()")
     
@@ -157,29 +157,37 @@ for name in regressors:
     res=regressor.predict(Xtest).round()
     pred_acc=1-np.mean(abs(res-ytest))
     RESULT[name]=pred_acc
+
+regressors={}
+regressors['RFR']=RFR()
+regressors['BR']=BR()
+regressors['logR']=LogR()
+regressors['GBR']=GBR()
+import random
+result=[]
+models=['RFR','ETR', 'DTR', 'ABR','GBR','XGB',
+            'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 
+            'LinearRegression', 'LinSVR']
+for i in range(0, 100):
+    print(i)
+    n_regressors=np.round(random.random()*9+3) #the number of employed regressors fro STR
     
-#try 'STR' maybe also....stacking estimators together
-#'VR'
-
-
-
-
-
-# original, imputed, indices = train_bin, imputed, df2
-
-# accuracy={}
-# for col in indices.columns:
-#     rep=np.array(indices[col][indices[col]==True].index)
-#     org=original.loc[rep,col]
-#     imp=imputed.loc[rep,col]
-#     if org.dtype!=bool:
-#         accur=np.mean(abs(np.array(org)-np.array(imp))/np.array(org))
-#     else:
-#         accur=np.mean(abs(np.array(org)-np.array(imp)))
-#     accuracy[col]=accur
-
-
-#somehow the accuracy is not correct...
+    
+    estimators=[]
+    random_regressors=random.sample(list(np.arange(0, len(models))), int(n_regressors))
+    #get a list of indices, referring to the loaded regressors. Now stack them together
+    for i in random_regressors:
+        estimators+=[(models[i], eval(models[i]+"()"))]
+    regressor=STR(estimators=estimators)
+    regressor.fit(Xtrain, ytrain)
+    
+    res=regressor.predict(Xtest).round()
+    pred_acc=1-np.mean(abs(res-ytest))
+    result.append(pred_acc)
+# ###same for VR
+# # and maybe a random selection of regressors?
+# #what about keras/tensorflow?
+# ##reworking impuiatition, clipping to a certain range...
     
             
 
