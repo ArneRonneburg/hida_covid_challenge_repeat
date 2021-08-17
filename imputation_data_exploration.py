@@ -99,18 +99,39 @@ def imput_accuracy(original, imputed, indices):
             
         accuracy[col]=[accur]
     return accuracy
-def do_the_imputation(data, imputer):
+def do_the_imputation(df1, imputer):
     #introduce a rounding for binary columns
     #introduce a range for columns such as oxygen saturation or ph
-    
-    return data
+    imputed=pd.DataFrame(imputer.fit_transform(df1), columns=df1.columns)
+    binary_cols=['Age','Sex','Cough','DifficultyInBreathing','RespiratoryFailure', 'CardiovascularDisease'] 
+    limitations={
+        "Age": [1, 120],
+        "Temp_C" : [36, 42.5], 
+        "WBC" : [0, 1000], 
+        "CRP": [0, 2500],
+        "Fibrinogen": [5,10000], 
+        "LDH": [0, 25000],
+        "Ddimer": [10, 1000000],
+        "Ox_percentage": [25, 100],
+        "PaO2": [0,700],
+        "SaO2": [0,100],
+        "pH": [5, 10]
+        }
+        
+    for i in binary_cols:
+        imputed[i]=np.round(np.array(imputed.loc[:,i]))
+    for L in limitations.keys():
+        low, high= limitations[L]
+        imputed[i]=np.clip(np.array(imputed.loc[:,i]),low, high)
+    return imputed
 imputer_accuracy=np.zeros(75)
 for j in range(1, len(imputer_accuracy)):
     print(j)
     imputer=KNN(n_neighbors=j)
     
     df1,df2=remove_random_values(train_bin)
-    imputed=pd.DataFrame(imputer.fit_transform(df1), columns=df1.columns)
+    imputed=do_the_imputation(df1,imputer)
+    
     acc= imput_accuracy(train_bin, imputed, df2)
     for i in range(1, 10):
         df1,df2=remove_random_values(train_bin)
@@ -121,70 +142,70 @@ for j in range(1, len(imputer_accuracy)):
 imputer=KNN(n_neighbors=15)
     
 
-imputed=pd.DataFrame(imputer.fit_transform(train_bin), columns=train_bin.columns)
-from sklearn.model_selection import train_test_split as tts    
-from sklearn.ensemble import ExtraTreesRegressor as ETR
-from sklearn.ensemble import RandomForestRegressor as RFR
-from sklearn.ensemble import RandomForestClassifier as RFC
-from sklearn.tree import DecisionTreeRegressor as DTR
-from sklearn.ensemble import AdaBoostRegressor as ABR
-from sklearn.ensemble import BaggingRegressor as BR
-from sklearn.ensemble import GradientBoostingRegressor as GBR
-from sklearn.ensemble import StackingRegressor as STR
-from sklearn.ensemble import VotingRegressor as VR
-from sklearn.experimental import enable_hist_gradient_boosting
-from sklearn.ensemble import HistGradientBoostingRegressor as HGBR
-from sklearn.linear_model import BayesianRidge as BR
-from sklearn.linear_model import ARDRegression as ARD
-from xgboost import XGBRegressor as XGB
-from sklearn.linear_model import ElasticNet as EN
-from sklearn.linear_model import Lars
-from sklearn.linear_model import ElasticNetCV as ENCV
-from sklearn.linear_model import LogisticRegression as LogR
-from sklearn.linear_model import RidgeClassifier as Ridge
-from sklearn.linear_model import Perceptron, LinearRegression
-from sklearn.svm import LinearSVR as LinSVR
-Xtrain, Xtest,ytrain ,ytest=tts(imputed, y)
-RESULT={}
-models=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
-            'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 'LogR', 
-            'Ridge', 'Perceptron', 'LinearRegression', 'LinSVR']
-for name in models:
+# imputed=pd.DataFrame(imputer.fit_transform(train_bin), columns=train_bin.columns)
+# from sklearn.model_selection import train_test_split as tts    
+# from sklearn.ensemble import ExtraTreesRegressor as ETR
+# from sklearn.ensemble import RandomForestRegressor as RFR
+# from sklearn.ensemble import RandomForestClassifier as RFC
+# from sklearn.tree import DecisionTreeRegressor as DTR
+# from sklearn.ensemble import AdaBoostRegressor as ABR
+# from sklearn.ensemble import BaggingRegressor as BR
+# from sklearn.ensemble import GradientBoostingRegressor as GBR
+# from sklearn.ensemble import StackingRegressor as STR
+# from sklearn.ensemble import VotingRegressor as VR
+# from sklearn.experimental import enable_hist_gradient_boosting
+# from sklearn.ensemble import HistGradientBoostingRegressor as HGBR
+# from sklearn.linear_model import BayesianRidge as BR
+# from sklearn.linear_model import ARDRegression as ARD
+# from xgboost import XGBRegressor as XGB
+# from sklearn.linear_model import ElasticNet as EN
+# from sklearn.linear_model import Lars
+# from sklearn.linear_model import ElasticNetCV as ENCV
+# from sklearn.linear_model import LogisticRegression as LogR
+# from sklearn.linear_model import RidgeClassifier as Ridge
+# from sklearn.linear_model import Perceptron, LinearRegression
+# from sklearn.svm import LinearSVR as LinSVR
+# Xtrain, Xtest,ytrain ,ytest=tts(imputed, y)
+# RESULT={}
+# models=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
+#             'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 'LogR', 
+#             'Ridge', 'Perceptron', 'LinearRegression', 'LinSVR']
+# for name in models:
 
-    regressor=eval(name + "()")
+#     regressor=eval(name + "()")
     
-    regressor.fit(Xtrain, ytrain)
-    res=regressor.predict(Xtest).round()
-    pred_acc=1-np.mean(abs(res-ytest))
-    RESULT[name]=pred_acc
+#     regressor.fit(Xtrain, ytrain)
+#     res=regressor.predict(Xtest).round()
+#     pred_acc=1-np.mean(abs(res-ytest))
+#     RESULT[name]=pred_acc
 
-regressors={}
-regressors['RFR']=RFR()
-regressors['BR']=BR()
-regressors['logR']=LogR()
-regressors['GBR']=GBR()
-import random
-result=[]
-models=['RFR','ETR', 'DTR', 'ABR','GBR','XGB',
-            'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 
-            'LinearRegression', 'LinSVR']
-for i in range(0, 100):
-    print(i)
-    n_regressors=np.round(random.random()*9+3) #the number of employed regressors fro STR
+# regressors={}
+# regressors['RFR']=RFR()
+# regressors['BR']=BR()
+# regressors['logR']=LogR()
+# regressors['GBR']=GBR()
+# import random
+# result=[]
+# models=['RFR','ETR', 'DTR', 'ABR','GBR','XGB',
+#             'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 
+#             'LinearRegression', 'LinSVR']
+# for i in range(0, 100):
+#     print(i)
+#     n_regressors=np.round(random.random()*9+3) #the number of employed regressors fro STR
     
     
-    estimators=[]
-    random_regressors=random.sample(list(np.arange(0, len(models))), int(n_regressors))
-    #get a list of indices, referring to the loaded regressors. Now stack them together
-    for i in random_regressors:
-        estimators+=[(models[i], eval(models[i]+"()"))]
-    regressor=STR(estimators=estimators)
-    regressor.fit(Xtrain, ytrain)
+#     estimators=[]
+#     random_regressors=random.sample(list(np.arange(0, len(models))), int(n_regressors))
+#     #get a list of indices, referring to the loaded regressors. Now stack them together
+#     for i in random_regressors:
+#         estimators+=[(models[i], eval(models[i]+"()"))]
+#     regressor=STR(estimators=estimators)
+#     regressor.fit(Xtrain, ytrain)
     
-    res=regressor.predict(Xtest).round()
-    pred_acc=1-np.mean(abs(res-ytest))
-    result.append(pred_acc)
-# ###same for VR
+#     res=regressor.predict(Xtest).round()
+#     pred_acc=1-np.mean(abs(res-ytest))
+#     result.append(pred_acc)
+# # ###same for VR
 # # and maybe a random selection of regressors?
 # #what about keras/tensorflow?
 # ##reworking impuiatition, clipping to a certain range...
