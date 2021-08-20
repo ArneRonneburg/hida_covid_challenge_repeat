@@ -107,7 +107,7 @@ def do_the_imputation(df1, imputer):
     limitations={
         "Age": [1, 120],
         "Temp_C" : [36, 42.5], 
-        "WBC" : [0, 1000], 
+         "WBC" : [0, 1000], 
         "CRP": [0, 2500],
         "Fibrinogen": [5,10000], 
         "LDH": [0, 25000],
