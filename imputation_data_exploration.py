@@ -124,60 +124,60 @@ def do_the_imputation(df1, imputer):
         low, high= limitations[L]
         imputed[i]=np.clip(np.array(imputed.loc[:,i]),low, high)
     return imputed
-imputer_accuracy=np.zeros(75)
-for j in range(1, len(imputer_accuracy)):
-    print(j)
-    imputer=KNN(n_neighbors=j)
+# imputer_accuracy=np.zeros(75)
+# for j in range(1, len(imputer_accuracy)):
+#     print(j)
+#     imputer=KNN(n_neighbors=j)
     
-    df1,df2=remove_random_values(train_bin)
-    imputed=do_the_imputation(df1,imputer)
+#     df1,df2=remove_random_values(train_bin)
+#     imputed=do_the_imputation(df1,imputer)
     
-    acc= imput_accuracy(train_bin, imputed, df2)
-    for i in range(1, 10):
-        df1,df2=remove_random_values(train_bin)
-        imputed=pd.DataFrame(imputer.fit_transform(df1), columns=df1.columns)
-        acc=acc + imput_accuracy(train_bin, imputed, df2)
-    imputer_accuracy[j]=acc.mean(axis=1)
+#     acc= imput_accuracy(train_bin, imputed, df2)
+#     for i in range(1, 50):
+#         df1,df2=remove_random_values(train_bin)
+#         imputed=pd.DataFrame(imputer.fit_transform(df1), columns=df1.columns)
+#         acc=acc + imput_accuracy(train_bin, imputed, df2)
+#     imputer_accuracy[j]=acc.mean(axis=1)/(i+1)
 
-imputer=KNN(n_neighbors=15)
+imputer=KNN(n_neighbors=22)
     
 
-# imputed=pd.DataFrame(imputer.fit_transform(train_bin), columns=train_bin.columns)
-# from sklearn.model_selection import train_test_split as tts    
-# from sklearn.ensemble import ExtraTreesRegressor as ETR
-# from sklearn.ensemble import RandomForestRegressor as RFR
-# from sklearn.ensemble import RandomForestClassifier as RFC
-# from sklearn.tree import DecisionTreeRegressor as DTR
-# from sklearn.ensemble import AdaBoostRegressor as ABR
-# from sklearn.ensemble import BaggingRegressor as BR
-# from sklearn.ensemble import GradientBoostingRegressor as GBR
-# from sklearn.ensemble import StackingRegressor as STR
-# from sklearn.ensemble import VotingRegressor as VR
-# from sklearn.experimental import enable_hist_gradient_boosting
-# from sklearn.ensemble import HistGradientBoostingRegressor as HGBR
-# from sklearn.linear_model import BayesianRidge as BR
-# from sklearn.linear_model import ARDRegression as ARD
-# from xgboost import XGBRegressor as XGB
-# from sklearn.linear_model import ElasticNet as EN
-# from sklearn.linear_model import Lars
-# from sklearn.linear_model import ElasticNetCV as ENCV
-# from sklearn.linear_model import LogisticRegression as LogR
-# from sklearn.linear_model import RidgeClassifier as Ridge
-# from sklearn.linear_model import Perceptron, LinearRegression
-# from sklearn.svm import LinearSVR as LinSVR
-# Xtrain, Xtest,ytrain ,ytest=tts(imputed, y)
-# RESULT={}
-# models=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
-#             'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 'LogR', 
-#             'Ridge', 'Perceptron', 'LinearRegression', 'LinSVR']
-# for name in models:
+imputed=pd.DataFrame(imputer.fit_transform(train_bin), columns=train_bin.columns)
+from sklearn.model_selection import train_test_split as tts    
+from sklearn.ensemble import ExtraTreesRegressor as ETR
+from sklearn.ensemble import RandomForestRegressor as RFR
+from sklearn.ensemble import RandomForestClassifier as RFC
+from sklearn.tree import DecisionTreeRegressor as DTR
+from sklearn.ensemble import AdaBoostRegressor as ABR
+from sklearn.ensemble import BaggingRegressor as BR
+from sklearn.ensemble import GradientBoostingRegressor as GBR
+from sklearn.ensemble import StackingRegressor as STR
+from sklearn.ensemble import VotingRegressor as VR
+from sklearn.experimental import enable_hist_gradient_boosting
+from sklearn.ensemble import HistGradientBoostingRegressor as HGBR
+from sklearn.linear_model import BayesianRidge as BR
+from sklearn.linear_model import ARDRegression as ARD
+from xgboost import XGBRegressor as XGB
+from sklearn.linear_model import ElasticNet as EN
+from sklearn.linear_model import Lars
+from sklearn.linear_model import ElasticNetCV as ENCV
+from sklearn.linear_model import LogisticRegression as LogR
+from sklearn.linear_model import RidgeClassifier as Ridge
+from sklearn.linear_model import Perceptron, LinearRegression
+from sklearn.svm import LinearSVR as LinSVR
+Xtrain, Xtest,ytrain ,ytest=tts(imputed, y)
+RESULT={}
+models=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
+            'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 'LogR', 
+            'Ridge', 'Perceptron', 'LinearRegression', 'LinSVR']
+for name in models:
 
-#     regressor=eval(name + "()")
+    regressor=eval(name + "()")
     
-#     regressor.fit(Xtrain, ytrain)
-#     res=regressor.predict(Xtest).round()
-#     pred_acc=1-np.mean(abs(res-ytest))
-#     RESULT[name]=pred_acc
+    regressor.fit(Xtrain, ytrain)
+    res=regressor.predict(Xtest).round()
+    pred_acc=1-np.mean(abs(res-ytest))
+    RESULT[name]=pred_acc
 
 # regressors={}
 # regressors['RFR']=RFR()
@@ -189,7 +189,7 @@ imputer=KNN(n_neighbors=15)
 # models=['RFR','ETR', 'DTR', 'ABR','GBR','XGB',
 #             'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 
 #             'LinearRegression', 'LinSVR']
-# for i in range(0, 100):
+# for i in range(0, 3):
 #     print(i)
 #     n_regressors=np.round(random.random()*9+3) #the number of employed regressors fro STR
     
@@ -205,6 +205,57 @@ imputer=KNN(n_neighbors=15)
 #     res=regressor.predict(Xtest).round()
 #     pred_acc=1-np.mean(abs(res-ytest))
 #     result.append(pred_acc)
+    #the ensemble is barely better than a standard Random Forest Classifier / GBR/LogR
+    #lets have a look on the images
+import pathlib
+import PIL
+
+# import tensorflow as tf
+image_path=r"C:\Users\Arne\Documents\DataScience\hida_covid_challenge_repeat\images\normalizedImg/"
+imagelist=os.listdir(image_path)
+#images=pd.DataFrame([])
+names=[]
+images=np.zeros((len(imagelist),1440000))
+for j in range(0, len(imagelist)):
+    i=imagelist[j]
+    print(i)
+    
+    im=np.asarray(PIL.Image.open(image_path+i)).flatten()
+    names.append(i)
+    images[j]=im
+    #images=pd.concat((images, pd.DataFrame(im)), ignore_index=True)
+Images=pd.DataFrame(images)    
+prognosis=[]
+for i in range(0, len(names)):
+    p=np.array(train[train.ImageFile==names[i]].Prognosis)[0]
+    if p=="MILD":
+        prognosis.append(0)
+    else:
+        prognosis.append(1)
+#so, the prognosis is the outcome for the image analysis...one means severe, zero means mild
+
+##try a random forest classifier, and a neural network
+
+Xtrain, Xtest,ytrain ,ytest=tts(Images, prognosis)
+regressor=RFR(n_estimators=500, n_jobs=4, verbose=2)
+
+regressor.fit(Xtrain, ytrain)
+res=regressor.predict(Xtest).round()
+
+pred_acc=1-np.mean(abs(res-ytest))
+from sklearn.neural_network import MLPClassifier as MLPC
+regressor2=MLPC(hidden_layer_sizes=(100,100,2), verbose=2)
+
+regressor2.fit(Xtrain, ytrain)
+res2=regressor2.predict(Xtest).round()
+
+pred_acc2=1-np.mean(abs(res2-ytest))
+
+#hm...not enough Ram...maybe things like ppartial_fit could be a nice idea
+
+
+
+#im=tf.keras.preprocessing.image.load_img(path_train+j+"/"+fname)
 # # ###same for VR
 # # and maybe a random selection of regressors?
 # #what about keras/tensorflow?
