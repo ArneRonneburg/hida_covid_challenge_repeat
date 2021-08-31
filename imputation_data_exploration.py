@@ -211,10 +211,12 @@ import pathlib
 import PIL
 
 # import tensorflow as tf
+import torch
 image_path=r"C:\Users\Arne\Documents\DataScience\hida_covid_challenge_repeat\images\normalizedImg/"
 imagelist=os.listdir(image_path)
 #images=pd.DataFrame([])
 names=[]
+
 images=np.zeros((len(imagelist),1440000))
 for j in range(0, len(imagelist)):
     i=imagelist[j]
@@ -244,7 +246,7 @@ res=regressor.predict(Xtest).round()
 
 pred_acc=1-np.mean(abs(res-ytest))
 from sklearn.neural_network import MLPClassifier as MLPC
-regressor2=MLPC(hidden_layer_sizes=(100,100,2), verbose=2)
+regressor2=MLPC(hidden_layer_sizes=(300,len(Xtrain.columns),2), verbose=2, max_iter=10000, tol=0.000001)
 
 regressor2.fit(Xtrain, ytrain)
 res2=regressor2.predict(Xtest).round()
