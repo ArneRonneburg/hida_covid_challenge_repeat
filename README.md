@@ -1,7 +1,10 @@
 # hida_covid_challenge_repeat
- repeating the HIDA covid datathon challenge, let's see how far I can get
+ repeating the HIDA covid datathon challenge, let's see how far we can get....the paper gets an accuracy of 78 %(?), can we get better?
+During the datathon, an incomplete set of clinical data of covid-19 patients was provided, together with chest x-ray images. Based on these data, the severity of the course of the disease (mild vs severe) shall be predicted. Therefore, two tasks have to be accomplished
 
-Geeigneten Imputer finden
+1) complete the missing values of the clinical data. 
+2) Use the completed data and the X-ray images to predict the severity of the disease
+
 
 
 Paper:
