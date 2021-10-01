@@ -71,6 +71,10 @@ Heatmap sortiert nach Krankenhäusern
 
 ![Ausreißer](https://user-images.githubusercontent.com/57065083/128627025-4d0df93d-76e5-4e08-81db-7ed5a42dc5ae.png)
 
+interessant ist hier, dass sich die unterschiedlichen Werte in "Gruppen" anordnen. -> Daher funktioniert KNN so gut. 
+Allerdings fällt auch auf, dass es einige Ausreißer gibt, die wahrscheinlch nicht von den KNN einbezogen werden. (z.B. WBC streut sehr)
+Auch sieht man, dass bei den Daten, wo viele Fehlstellen sind, der Fit wahrshcienlich scheiße ist (DDemer) 
+
 # Daten Korrelation
 
 ![Correlation](https://user-images.githubusercontent.com/57065083/128599579-4ec158d6-8f3b-4fe1-9033-a6335474597a.png)
