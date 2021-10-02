@@ -8,30 +8,54 @@ Created on Wed Aug  4 20:17:47 2021
 import os
 import numpy as np
 import pandas as pd
-import random
+import random ###?
 
 from sklearn.impute import KNNImputer as KNN
 
 ####define measures for the imputation quality. Idea 1: they have a similar mean and variance 
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split as tts
-from sklearn.ensemble import ExtraTreesRegressor as ETR, RandomForestRegressor as RFR, RandomForestClassifier as RFC, AdaBoostRegressor as ABR, BaggingRegressor as BR, GradientBoostingRegressor as GBR, StackingRegressor as STR, VotingRegressor as VR
+from sklearn import ensemble
+from sklearn import linear_model
 from sklearn.tree import DecisionTreeRegressor as DTR
 from sklearn.experimental import enable_hist_gradient_boosting
 from sklearn.ensemble import HistGradientBoostingRegressor as HGBR
-from sklearn.linear_model import BayesianRidge as BR, ARDRegression as ARD, ElasticNet as EN, Lars, ElasticNetCV as ENCV, ElasticNetCV as ENCV, ElasticNetCV as ENCV,LogisticRegression as LogR, RidgeClassifier as Ridge, Perceptron, LinearRegression
 from xgboost import XGBRegressor as XGB
 from sklearn.svm import LinearSVR as LinSVR
 
+
+####ensemble var
+ETR = ensemble.ExtraTreesRegressor
+RFR=ensemble.RandomForestRegressor
+RFC=ensemble.RandomForestClassifier
+ABR=ensemble.AdaBoostRegressor
+BR=ensemble.BaggingRegressor
+GBR=ensemble.GradientBoostingRegressor
+STR=ensemble.StackingRegressor
+VR=ensemble.VotingRegressor
+
+###linear_model var
+BR = linear_model.BayesianRidge
+ARD = linear_model.ARDRegression
+EN = linear_model.ElasticNet
+ENCV = linear_model.ElasticNetCV
+LogR = linear_model.LogisticRegression
+Ridge = linear_model.RidgeClassifier
+Per=linear_model.Perceptron
+LR=linear_model.Perceptron
+
+#Dataimport
 path="Data/"
 train=pd.read_csv(path + "trainSet.txt", index_col=None)
 test=pd.read_csv(path + "testSet.txt", index_col=None)
 
+
+##preprocessing
 encoder = preprocessing.LabelEncoder()
 #for a given column, calculate the mean and the variance
 moments={}
 
-for i in train.columns[3:-1]:##exclude patient ID, patient image, hospital, prognosis
+for i in train.columns[3:-1]:##exclude patient ID, patient image, hospital, prognosis ????
     moments[i]=[train[i].describe()[1], train[i].describe()[2]]
 
 def imput_accur_moments(series, series_imp):
