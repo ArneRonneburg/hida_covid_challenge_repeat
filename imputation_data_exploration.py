@@ -34,7 +34,7 @@ BR=ensemble.BaggingRegressor
 GBR=ensemble.GradientBoostingRegressor
 STR=ensemble.StackingRegressor
 VR=ensemble.VotingRegressor
-HGBR=ensemble.HistGradientBoostingRegressor
+#HGBR=ensemble.HistGradientBoostingRegressor
 
 ###linear_model var
 BR=linear_model.BayesianRidge
@@ -44,7 +44,7 @@ ENCV=linear_model.ElasticNetCV
 LogR=linear_model.LogisticRegression
 Ridge=linear_model.RidgeClassifier
 Per=linear_model.Perceptron
-LR=linear_model.Perceptron
+LR=linear_model.LinearRegression
 Lars=linear_model.Lars
 
 start_time = time.time() #### RUNTIMESTART
@@ -80,10 +80,10 @@ for i in label:
 #Schau dir mal SKLEARN classification_report  und confusion matrix an ;) muss das noch integrieren
 
 def imput_accur_moments(series, series_imp):
-    imp_mean=series_imp.describe()[1]
-    imp_stddev=series_imp.describe()[2]
-    meanval=series.describe()[1]
-    stddev=series.describe()[2]
+    imp_mean=series_imp.mean()
+    imp_stddev=series_imp.std()
+    meanval=series.mean()
+    stddev=series.std()
     accur=(abs(imp_mean-meanval)/meanval)**2 + (abs(imp_stddev - stddev)/stddev)**2
     return np.sqrt(accur)
 
@@ -205,8 +205,8 @@ imputed=pd.DataFrame(imputer.fit_transform(train_bin), columns=train_bin.columns
 
 Xtrain, Xtest,ytrain ,ytest=tts(imputed, y) #Ist nicht nötig, wir haben train und test daten
 RESULT={}
-models=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
-            'HGBR', 'BR', 'ARD', 'EN', 'ENCV','Lars', 'LogR',
+models=['RFR','RFC','ETR', 'ABR','BR','GBR',#"HGBR", 'XGB', 'DTR'
+             'BR', 'ARD', 'EN', 'ENCV','Lars', 'LogR',
             'Ridge', 'Perceptron', 'LinearRegression', 'LinSVR']
 for name in models:
 
