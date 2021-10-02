@@ -8,7 +8,7 @@ Created on Wed Aug  4 20:17:47 2021
 import os #???
 import numpy as np
 import pandas as pd
-import random ###?
+import random ###? DU hast doch schon NP
 import PIL
 from sklearn.impute import KNNImputer as KNN
 ####define measures for the imputation quality. Idea 1: they have a similar mean and variance 
@@ -18,9 +18,9 @@ from sklearn import ensemble
 from sklearn import linear_model
 from sklearn.tree import DecisionTreeRegressor as DTR
 from sklearn.experimental import enable_hist_gradient_boosting
-from sklearn.ensemble import  as HGBR
 from xgboost import XGBRegressor as XGB
 from sklearn.svm import LinearSVR as LinSVR
+from sklearn.metrics import classification_report,confusion_matrix
 
 
 ####ensemble var
@@ -43,6 +43,7 @@ LogR=linear_model.LogisticRegression
 Ridge=linear_model.RidgeClassifier
 Per=linear_model.Perceptron
 LR=linear_model.Perceptron
+Lars=linear_model.Lars
 
 #Dataimport
 PATH="Data/"
@@ -67,7 +68,11 @@ label =["Sex","Cough","Hospital","Prognosis"]
 for i in label:
     train[i]=le.fit_transform(train[i])
 
-#ka was das tut, wenn du die stdev haben willst,geht das auch einfacher numpy.std
+##UFF, jetzt verstehe ich was du hier tust oder versuchst das frist aber viel Zeit und ist umständlich
+#dafür hat man classification_report und confusion matrix
+###ABER JETZT GEHE ICH ERSTMAL DAS WETTER GENIEßEN, ich mach später weiter, hab den code jetzt schon
+# von einem Score -20/10 auf 2.75/10 gebracht :D
+
 def imput_accur_moments(series, series_imp):
     imp_mean=series_imp.describe()[1]
     imp_stddev=series_imp.describe()[2]
@@ -75,6 +80,10 @@ def imput_accur_moments(series, series_imp):
     stddev=series.describe()[2]
     accur=(abs(imp_mean-meanval)/meanval)**2 + (abs(imp_stddev - stddev)/stddev)**2
     return np.sqrt(accur)
+
+
+#print(classification_report(train))
+#print(confusion_matrix(train))
 
 #check the different knn imputer properties, which one preserves the moments?
 accur=pd.DataFrame(np.zeros((50, len(train.columns[3:-1]))), columns=train.columns[3:-1])
@@ -187,7 +196,7 @@ imputed=pd.DataFrame(imputer.fit_transform(train_bin), columns=train_bin.columns
 Xtrain, Xtest,ytrain ,ytest=tts(imputed, y)
 RESULT={}
 models=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
-            'HGBR', 'BR', 'ARD', 'EN', 'ENCV', 'Lars', 'LogR', 
+            'HGBR', 'BR', 'ARD', 'EN', 'ENCV','Lars', 'LogR',
             'Ridge', 'Perceptron', 'LinearRegression', 'LinSVR']
 for name in models:
 
