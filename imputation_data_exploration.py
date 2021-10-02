@@ -5,27 +5,26 @@ Created on Wed Aug  4 20:17:47 2021
 @author: Arne
 """
 
-import os
+import os #???
 import numpy as np
 import pandas as pd
 import random ###?
-
+import PIL
 from sklearn.impute import KNNImputer as KNN
-
 ####define measures for the imputation quality. Idea 1: they have a similar mean and variance 
-from sklearn import preprocessing
-from sklearn.model_selection import train_test_split as tts
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.model_selection import train_test_split as tts #ist das nötig ? wir habn doch train und test daten
 from sklearn import ensemble
 from sklearn import linear_model
 from sklearn.tree import DecisionTreeRegressor as DTR
 from sklearn.experimental import enable_hist_gradient_boosting
-from sklearn.ensemble import HistGradientBoostingRegressor as HGBR
+from sklearn.ensemble import  as HGBR
 from xgboost import XGBRegressor as XGB
 from sklearn.svm import LinearSVR as LinSVR
 
 
 ####ensemble var
-ETR = ensemble.ExtraTreesRegressor
+ETR=ensemble.ExtraTreesRegressor
 RFR=ensemble.RandomForestRegressor
 RFC=ensemble.RandomForestClassifier
 ABR=ensemble.AdaBoostRegressor
@@ -33,31 +32,42 @@ BR=ensemble.BaggingRegressor
 GBR=ensemble.GradientBoostingRegressor
 STR=ensemble.StackingRegressor
 VR=ensemble.VotingRegressor
+HGBR=ensemble.HistGradientBoostingRegressor
 
 ###linear_model var
-BR = linear_model.BayesianRidge
-ARD = linear_model.ARDRegression
-EN = linear_model.ElasticNet
-ENCV = linear_model.ElasticNetCV
-LogR = linear_model.LogisticRegression
-Ridge = linear_model.RidgeClassifier
+BR=linear_model.BayesianRidge
+ARD=linear_model.ARDRegression
+EN=linear_model.ElasticNet
+ENCV=linear_model.ElasticNetCV
+LogR=linear_model.LogisticRegression
+Ridge=linear_model.RidgeClassifier
 Per=linear_model.Perceptron
 LR=linear_model.Perceptron
 
 #Dataimport
-path="Data/"
-train=pd.read_csv(path + "trainSet.txt", index_col=None)
-test=pd.read_csv(path + "testSet.txt", index_col=None)
-
+PATH="Data/"
+train=pd.read_csv(PATH + "trainSet.txt", index_col=None)
+test=pd.read_csv(PATH + "testSet.txt", index_col=None)
 
 ##preprocessing
-encoder = preprocessing.LabelEncoder()
+
 #for a given column, calculate the mean and the variance
-moments={}
+#moments={}
+#for i in train.columns[3:-1]:##exclude patient ID, patient image, hospital, prognosis ????
+    #moments[i]=[train[i].describe()[1], train[i].describe()[2]]
+#besser df.drop(["Colname1","Colname2","..."],axsis=1)
+train.drop(["PatientID","ImageFile"],axis=1)
+test.drop(["PatientID","ImageFile"],axis=1)
 
-for i in train.columns[3:-1]:##exclude patient ID, patient image, hospital, prognosis ????
-    moments[i]=[train[i].describe()[1], train[i].describe()[2]]
+#LableEncoder (warum nciht Autoencoder)
+le=LabelEncoder()
+OHE=OneHotEncoder() #? welcher ist besser
 
+label =["Sex","Cough","Hospital","Prognosis"]
+for i in label:
+    train[i]=le.fit_transform(train[i])
+
+#ka was das tut, wenn du die stdev haben willst,geht das auch einfacher numpy.std
 def imput_accur_moments(series, series_imp):
     imp_mean=series_imp.describe()[1]
     imp_stddev=series_imp.describe()[2]
@@ -69,7 +79,8 @@ def imput_accur_moments(series, series_imp):
 #check the different knn imputer properties, which one preserves the moments?
 accur=pd.DataFrame(np.zeros((50, len(train.columns[3:-1]))), columns=train.columns[3:-1])
 train_red=train[train.columns[3:-1]]
-y=encoder.fit_transform(train.Prognosis)
+y=le.fit_transform(train.Prognosis) # y ist immer eine Orts angabe
+
 
 for k in range(1, 50):
     imputer=KNN(n_neighbors=k)
@@ -94,7 +105,7 @@ train_bin=train_red.copy()
 
 
 for col in binarycolumns:
-    train_bin[col]=encoder.fit_transform(train_bin[col])
+    train_bin[col]=le.fit_transform(train_bin[col])
     train_bin[col]=train_bin[col].astype(bool)
 
 
@@ -215,8 +226,8 @@ for name in models:
 #     result.append(pred_acc)
     #the ensemble is barely better than a standard Random Forest Classifier / GBR/LogR
     #lets have a look on the images
-import pathlib
-import PIL
+
+
 
 # import tensorflow as tf
 import torch
