@@ -12,7 +12,6 @@ import random ###? DU hast doch schon NP
 import time
 import numpy as np
 import pandas as pd
-
 ####define measures for the imputation quality. Idea 1: they have a similar mean and variance
 from sklearn.impute import KNNImputer as KNN
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
@@ -25,7 +24,6 @@ from sklearn import linear_model
 #from sklearn.svm import LinearSVR as LinSVR
 #from sklearn.metrics import classification_report,confusion_matrix
 #from sklearn.neural_network import MLPClassifier as MLPC
-
 
 ####ensemble var
 ETR=ensemble.ExtraTreesRegressor
@@ -50,7 +48,6 @@ LR=linear_model.Perceptron
 Lars=linear_model.Lars
 
 start_time = time.time() #### RUNTIMESTART
-
 
 #Dataimport
 PATH="Data/"
