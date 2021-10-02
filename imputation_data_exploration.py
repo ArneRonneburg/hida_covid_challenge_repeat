@@ -14,8 +14,9 @@ import pandas as pd
 import random ###? DU hast doch schon NP
 import time
 import PIL
+
+####define measures for the imputation quality. Idea 1: they have a similar mean and variance
 from sklearn.impute import KNNImputer as KNN
-####define measures for the imputation quality. Idea 1: they have a similar mean and variance 
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.model_selection import train_test_split as tts #ist das nötig ? wir habn doch train und test daten
 from sklearn import ensemble
@@ -25,6 +26,7 @@ from sklearn.experimental import enable_hist_gradient_boosting
 from xgboost import XGBRegressor as XGB
 from sklearn.svm import LinearSVR as LinSVR
 from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.neural_network import MLPClassifier as MLPC
 
 
 ####ensemble var
@@ -99,7 +101,7 @@ def imput_accur_moments(series, series_imp):
 
 
 #check the different knn imputer properties, which one preserves the moments?
-accur=pd.DataFrame(np.zeros((50, len(train.columns[3:-1]))), columns=train.columns[3:-1])
+accur=pd.DataFrame(np.zeros((50, len(train.columns[3:-1]))), columns=train.columns[3:-1]) #Was tut es?
 train_red=train[train.columns[3:-1]]
 y=le.fit_transform(train.Prognosis) # x & y sind immer eine Ortsangabe
 
@@ -286,7 +288,6 @@ regressor.fit(Xtrain, ytrain)
 res=regressor.predict(Xtest).round()
 
 pred_acc=1-np.mean(abs(res-ytest))
-from sklearn.neural_network import MLPClassifier as MLPC
 regressor2=MLPC(hidden_layer_sizes=(300,len(Xtrain.columns),2), verbose=2, max_iter=10000, tol=0.000001)
 
 regressor2.fit(Xtrain, ytrain)
