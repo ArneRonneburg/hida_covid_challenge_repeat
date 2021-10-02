@@ -122,23 +122,22 @@ for k in range(1, 50): #das ist überflüssig für den KNN Imputer
 
 
 ###replace the columns in the train set by boolean values for such as sex, DifficultyInBreathing etc.
-binarycolumns=['Sex','Cough','DifficultyInBreathing','RespiratoryFailure', 'CardiovascularDisease'] 
+binarycolumns=['Sex','Cough','DifficultyInBreathing','RespiratoryFailure', 'CardiovascularDisease'] #Hospital?Prognosis?
 train_bin=train_red.copy()
 
 #labelencoder
 
-
+#HÄ? warum den lable encoder hier ?
 for col in binarycolumns:
     train_bin[col]=le.fit_transform(train_bin[col])
-    train_bin[col]=train_bin[col].astype(bool)
+    train_bin[col]=train_bin[col].astype(bool)# ist das nicht überflüssig, das wird doch von transform gemacht
 
 
 def remove_random_values(df):
-    df_removed=df.copy()
+    df_removed=df.copy() # copy?
     ###the df where the data is removed
     df_index=df.copy()
-    
-    
+
     for col in df.columns:
         indices=list(df[col].dropna().index)
         set_nan=random.sample(indices, int(len(indices)/10))#remove roughly 10%
@@ -163,6 +162,7 @@ def imput_accuracy(original, imputed, indices):
             
         accuracy[col]=[accur]
     return accuracy
+#warum gibts du limits an?
 def do_the_imputation(df1, imputer):
     #introduce a rounding for binary columns
     #introduce a range for columns such as oxygen saturation or ph
@@ -203,12 +203,12 @@ def do_the_imputation(df1, imputer):
 #         acc=acc + imput_accuracy(train_bin, imputed, df2)
 #     imputer_accuracy[j]=acc.mean(axis=1)/(i+1)
 
-imputer=KNN(n_neighbors=22)
+imputer=KNN(n_neighbors=22)#woher kommt die 22 ?
     
 
 imputed=pd.DataFrame(imputer.fit_transform(train_bin), columns=train_bin.columns)
 
-Xtrain, Xtest,ytrain ,ytest=tts(imputed, y)
+Xtrain, Xtest,ytrain ,ytest=tts(imputed, y) #Ist nicht nötig, wir haben train und test daten
 RESULT={}
 models=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
             'HGBR', 'BR', 'ARD', 'EN', 'ENCV','Lars', 'LogR',
@@ -252,51 +252,52 @@ for name in models:
     #lets have a look on the images
 
 
-
+####Was machden die Bilder hier ?
 # import tensorflow as tf
 import torch
-image_path=r"C:\Users\Arne\Documents\DataScience\hida_covid_challenge_repeat\images\normalizedImg/"
-imagelist=os.listdir(image_path)
+#IMAGE_PATH=r"C:\Users\Arne\Documents\DataScience\hida_covid_challenge_repeat\images\normalizedImg/"
+#imagelist=os.listdir(IMAGE_PATH)
 #images=pd.DataFrame([])
-names=[]
+#names=[]
 
-images=np.zeros((len(imagelist),1440000))
-for j in range(0, len(imagelist)):
-    i=imagelist[j]
-    print(i)
+#images=np.zeros((len(imagelist),1440000))
+#for j in range(0, len(imagelist)):
+ #   i=imagelist[j]
+  #  print(i)
     
-    im=np.asarray(PIL.Image.open(image_path+i)).flatten()
-    names.append(i)
-    images[j]=im
+   # im=np.asarray(PIL.Image.open(IMAGE_PATH+i)).flatten()
+   # names.append(i)
+   # images[j]=im
     #images=pd.concat((images, pd.DataFrame(im)), ignore_index=True)
-Images=pd.DataFrame(images)    
-prognosis=[]
-for i in range(0, len(names)):
-    p=np.array(train[train.ImageFile==names[i]].Prognosis)[0]
-    if p=="MILD":
-        prognosis.append(0)
-    else:
-        prognosis.append(1)
+#Images=pd.DataFrame(images)
+#prognosis=[]
+#for i in range(0, len(names)):
+ #   p=np.array(train[train.ImageFile==names[i]].Prognosis)[0]
+  #  if p=="MILD":
+   #     prognosis.append(0)
+   # else:
+    #    prognosis.append(1)
 #so, the prognosis is the outcome for the image analysis...one means severe, zero means mild
 
 ##try a random forest classifier, and a neural network
 
-Xtrain, Xtest,ytrain ,ytest=tts(Images, prognosis)
-regressor=RFR(n_estimators=500, n_jobs=4, verbose=2)
+#Xtrain, Xtest,ytrain ,ytest=tts(Images, prognosis)
+#regressor=RFR(n_estimators=500, n_jobs=4, verbose=2)
 
-regressor.fit(Xtrain, ytrain)
-res=regressor.predict(Xtest).round()
+#regressor.fit(Xtrain, ytrain)
+#res=regressor.predict(Xtest).round()
 
-pred_acc=1-np.mean(abs(res-ytest))
-regressor2=MLPC(hidden_layer_sizes=(300,len(Xtrain.columns),2), verbose=2, max_iter=10000, tol=0.000001)
+#pred_acc=1-np.mean(abs(res-ytest))
+#regressor2=MLPC(hidden_layer_sizes=(300,len(Xtrain.columns),2), verbose=2, max_iter=10000, tol=0.000001)
 
-regressor2.fit(Xtrain, ytrain)
-res2=regressor2.predict(Xtest).round()
+#regressor2.fit(Xtrain, ytrain)
+#res2=regressor2.predict(Xtest).round()
 
-pred_acc2=1-np.mean(abs(res2-ytest))
+#pred_acc2=1-np.mean(abs(res2-ytest))
 
 #hm...not enough Ram...maybe things like ppartial_fit could be a nice idea
-
+#Naja oder, weniger retundanz, dann haut das mit dem RAM auch hin;D
+# ich glaube kaum, dass wir 16 GB Bilder haben oder NP arrays usw
 
 
 #im=tf.keras.preprocessing.image.load_img(path_train+j+"/"+fname)
