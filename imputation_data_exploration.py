@@ -8,12 +8,11 @@ Created on Wed Aug  4 20:17:47 2021
 
 ###generell sehe ich hier keine Data exploration!
 
-import os #???
 import numpy as np
 import pandas as pd
 import random ###? DU hast doch schon NP
 import time
-import PIL
+
 
 ####define measures for the imputation quality. Idea 1: they have a similar mean and variance
 from sklearn.impute import KNNImputer as KNN
@@ -21,12 +20,12 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.model_selection import train_test_split as tts #ist das nötig ? wir habn doch train und test daten
 from sklearn import ensemble
 from sklearn import linear_model
-from sklearn.tree import DecisionTreeRegressor as DTR
-from sklearn.experimental import enable_hist_gradient_boosting
-from xgboost import XGBRegressor as XGB
-from sklearn.svm import LinearSVR as LinSVR
-from sklearn.metrics import classification_report,confusion_matrix
-from sklearn.neural_network import MLPClassifier as MLPC
+#from sklearn.tree import DecisionTreeRegressor as DTR
+#from sklearn.experimental import enable_hist_gradient_boosting
+#from xgboost import XGBRegressor as XGB
+#from sklearn.svm import LinearSVR as LinSVR
+#from sklearn.metrics import classification_report,confusion_matrix
+#from sklearn.neural_network import MLPClassifier as MLPC
 
 
 ####ensemble var
