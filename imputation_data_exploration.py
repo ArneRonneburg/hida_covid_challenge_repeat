@@ -8,11 +8,10 @@ Created on Wed Aug  4 20:17:47 2021
 
 ###generell sehe ich hier keine Data exploration!
 
-
-import pandas as pd
 import random ###? DU hast doch schon NP
 import time
 import numpy as np
+import pandas as pd
 
 ####define measures for the imputation quality. Idea 1: they have a similar mean and variance
 from sklearn.impute import KNNImputer as KNN
