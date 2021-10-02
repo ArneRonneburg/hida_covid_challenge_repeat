@@ -6,26 +6,31 @@ Created on Wed Aug  4 20:17:47 2021
 """
 
 import os
-import time
-import sys
 import numpy as np
-import sklearn as sk
-import scipy as scp
-import matplotlib.pyplot as plt
 import pandas as pd
+import random
+
 from sklearn.impute import KNNImputer as KNN
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer as II
-path=r"C:\Users\Arne\Documents\DataScience\hida_covid_challenge_repeat/"
-train=pd.read_csv(path + "trainSet.txt", index_col=None)
-test=pd.read_csv(path + "testSet.txt", index_col=None)
+
 ####define measures for the imputation quality. Idea 1: they have a similar mean and variance 
 from sklearn import preprocessing
-import random
+from sklearn.model_selection import train_test_split as tts
+from sklearn.ensemble import ExtraTreesRegressor as ETR, RandomForestRegressor as RFR, RandomForestClassifier as RFC, AdaBoostRegressor as ABR, BaggingRegressor as BR, GradientBoostingRegressor as GBR, StackingRegressor as STR, VotingRegressor as VR
+from sklearn.tree import DecisionTreeRegressor as DTR
+from sklearn.experimental import enable_hist_gradient_boosting
+from sklearn.ensemble import HistGradientBoostingRegressor as HGBR
+from sklearn.linear_model import BayesianRidge as BR, ARDRegression as ARD, ElasticNet as EN, Lars, ElasticNetCV as ENCV, ElasticNetCV as ENCV, ElasticNetCV as ENCV,LogisticRegression as LogR, RidgeClassifier as Ridge, Perceptron, LinearRegression
+from xgboost import XGBRegressor as XGB
+from sklearn.svm import LinearSVR as LinSVR
+
+path="Data/"
+train=pd.read_csv(path + "trainSet.txt", index_col=None)
+test=pd.read_csv(path + "testSet.txt", index_col=None)
 
 encoder = preprocessing.LabelEncoder()
 #for a given column, calculate the mean and the variance
 moments={}
+
 for i in train.columns[3:-1]:##exclude patient ID, patient image, hospital, prognosis
     moments[i]=[train[i].describe()[1], train[i].describe()[2]]
 
@@ -143,28 +148,7 @@ imputer=KNN(n_neighbors=22)
     
 
 imputed=pd.DataFrame(imputer.fit_transform(train_bin), columns=train_bin.columns)
-from sklearn.model_selection import train_test_split as tts    
-from sklearn.ensemble import ExtraTreesRegressor as ETR
-from sklearn.ensemble import RandomForestRegressor as RFR
-from sklearn.ensemble import RandomForestClassifier as RFC
-from sklearn.tree import DecisionTreeRegressor as DTR
-from sklearn.ensemble import AdaBoostRegressor as ABR
-from sklearn.ensemble import BaggingRegressor as BR
-from sklearn.ensemble import GradientBoostingRegressor as GBR
-from sklearn.ensemble import StackingRegressor as STR
-from sklearn.ensemble import VotingRegressor as VR
-from sklearn.experimental import enable_hist_gradient_boosting
-from sklearn.ensemble import HistGradientBoostingRegressor as HGBR
-from sklearn.linear_model import BayesianRidge as BR
-from sklearn.linear_model import ARDRegression as ARD
-from xgboost import XGBRegressor as XGB
-from sklearn.linear_model import ElasticNet as EN
-from sklearn.linear_model import Lars
-from sklearn.linear_model import ElasticNetCV as ENCV
-from sklearn.linear_model import LogisticRegression as LogR
-from sklearn.linear_model import RidgeClassifier as Ridge
-from sklearn.linear_model import Perceptron, LinearRegression
-from sklearn.svm import LinearSVR as LinSVR
+
 Xtrain, Xtest,ytrain ,ytest=tts(imputed, y)
 RESULT={}
 models=['RFR','RFC','ETR', 'DTR', 'ABR','BR','GBR','XGB',
