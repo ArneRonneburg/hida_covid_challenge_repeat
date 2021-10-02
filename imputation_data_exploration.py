@@ -4,11 +4,15 @@ Created on Wed Aug  4 20:17:47 2021
 
 @author: Arne
 """
+#####https://code-knowledge.com/python-syntax-and-rules/
+
+###generell sehe ich hier keine Data exploration!
 
 import os #???
 import numpy as np
 import pandas as pd
 import random ###? DU hast doch schon NP
+import time
 import PIL
 from sklearn.impute import KNNImputer as KNN
 ####define measures for the imputation quality. Idea 1: they have a similar mean and variance 
@@ -45,6 +49,9 @@ Per=linear_model.Perceptron
 LR=linear_model.Perceptron
 Lars=linear_model.Lars
 
+start_time = time.time() #### RUNTIMESTART
+
+
 #Dataimport
 PATH="Data/"
 train=pd.read_csv(PATH + "trainSet.txt", index_col=None)
@@ -69,9 +76,11 @@ for i in label:
     train[i]=le.fit_transform(train[i])
 
 ##UFF, jetzt verstehe ich was du hier tust oder versuchst das frist aber viel Zeit und ist umständlich
-#dafür hat man classification_report und confusion matrix
-###ABER JETZT GEHE ICH ERSTMAL DAS WETTER GENIEßEN, ich mach später weiter, hab den code jetzt schon
-# von einem Score -20/10 auf 2.75/10 gebracht :D
+###Du rufst 4 mal .describe() auf und entnimmst jedesmal 1 Wert und das "schlimmste" ist, dafür gibts vorgebastelte
+#numpy/Scipy dinge ich muss nur drauf kommen ;D
+#Wenn du ein Programm schreibst, was ein "speed DLC" oder "Big Data DLC" entählt, kannst du das gerne verwenden
+#Hat dann den Wert von ein shell skript mit "Sleep = 100" ;D
+#Schau dir mal SKLEARN classification_report  und confusion matrix an ;) muss das noch integrieren
 
 def imput_accur_moments(series, series_imp):
     imp_mean=series_imp.describe()[1]
@@ -82,16 +91,20 @@ def imput_accur_moments(series, series_imp):
     return np.sqrt(accur)
 
 
-#print(classification_report(train))
-#print(confusion_matrix(train))
+#Bessere Methode (https://www.researchgate.net/publication/334237209_Comparison_of_Performance_of_Data_Imputation_Methods_for_Numeric_Dataset)
+# root mean square error (NRMSE)
+# NRMSE=√(mean((orginal value-imputed value)**2))/(max(orginal value)-min(orginal value))
+# Mean NRMSE = Sum NRMSE /n
+#
+
 
 #check the different knn imputer properties, which one preserves the moments?
 accur=pd.DataFrame(np.zeros((50, len(train.columns[3:-1]))), columns=train.columns[3:-1])
 train_red=train[train.columns[3:-1]]
-y=le.fit_transform(train.Prognosis) # y ist immer eine Orts angabe
+y=le.fit_transform(train.Prognosis) # x & y sind immer eine Ortsangabe
 
 
-for k in range(1, 50):
+for k in range(1, 50): #das ist überflüssig für den KNN Imputer
     imputer=KNN(n_neighbors=k)
     train_imputed=imputer.fit_transform(train_red)
     train_imputed=pd.DataFrame(train_imputed, columns=train_red.columns)
@@ -292,6 +305,7 @@ pred_acc2=1-np.mean(abs(res2-ytest))
 # ##reworking impuiatition, clipping to a certain range...
     
             
+print("Runtime--- %s seconds ---" % (time.time() - start_time))#RUNTIMEEXIT :D
 
     
 
