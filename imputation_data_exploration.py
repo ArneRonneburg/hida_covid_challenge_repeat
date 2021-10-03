@@ -66,7 +66,7 @@ test.drop(["PatientID","ImageFile"],axis=1)
 
 #LableEncoder (warum nciht Autoencoder)
 le=LabelEncoder()
-OHE=OneHotEncoder() #? welcher ist besser
+#OHE=OneHotEncoder() #? welcher ist besser
 
 label =["Sex","Cough","Hospital","Prognosis"]
 for i in label:
