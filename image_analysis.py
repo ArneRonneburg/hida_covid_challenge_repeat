@@ -56,10 +56,10 @@ class ImageDataset(Dataset):
         return image/255, label
     
     
-    def get_splits(self, n_test=50):
+    def get_splits(self, test_size=50):
     # def get_splits(self, n_test=200):
         # determine sizes
-        test_size = n_test  # validation
+       
         train_size = self.len - test_size  # training
 
         # calculate the split indexes
@@ -105,7 +105,6 @@ import matplotlib.pyplot as plt
 
 
 # device casting
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
 def save_ckp(state, is_best, checkpoint_path, best_model_path):
